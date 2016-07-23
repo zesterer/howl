@@ -3,7 +3,6 @@
 
 import app, interact from howl
 import markup from howl.ui
-serpent = require 'serpent'
 
 console_history = {}
 
