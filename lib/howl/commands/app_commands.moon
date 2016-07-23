@@ -2,7 +2,7 @@
 -- License: MIT (see LICENSE.md at the top-level directory of the distribution)
 
 import app, Buffer, command, config, bindings, bundle, dispatch, interact, signal, mode, Project from howl
-import ActionBuffer, ProcessBuffer, BufferPopup, StyledText from howl.ui
+import ActionBuffer, ProcessBuffer, BufferPopup, StyledText, markup from howl.ui
 import File, Process from howl.io
 import get_cwd from howl.util.paths
 serpent = require 'serpent'
@@ -360,7 +360,7 @@ command.register
     local buf
     if not lua
       buf = ActionBuffer!
-      buf\append howl.ui.markup.howl "<error>#{err}</error>"
+      buf\append markup.howl "<error>#{err}</error>"
     else
       buf = Buffer mode.by_name 'lua'
       buf.text = lua
@@ -423,3 +423,60 @@ config.define
   description: 'The command to execute when project-build is run'
   default: 'make'
   type_of: 'string'
+
+-----------------------------------------------------------------------
+-- Console command
+-----------------------------------------------------------------------
+
+local howl_console_context, clear_context
+clear_context = ->
+  for k in pairs(howl_console_context)
+    howl_console_context[k] = nil
+  howl_console_context.clear = clear_context
+
+howl_console_context = {
+  clear: clear_context
+}
+setmetatable howl_console_context, {__index: _G}
+
+command.register
+  name: 'howl-console'
+  description: 'The Howl Moonscript interactive console'
+  handler: ->
+    howl.interact.console
+      name: 'howl-console'
+      title: 'Howl console'
+      prompt: '> '
+      evaluator: (expression) ->
+        status, result = pcall ->
+          eval = moonscript.loadstring expression
+          if eval
+            debug_hook = ->
+              if debug.getinfo(2).func == eval
+                -- final return, capture the locals
+                i = 1
+                while true
+                  name, value = debug.getlocal(2, i)
+                  break unless name
+                  howl_console_context[name] = value
+                  i += 1
+
+            setfenv eval, howl_console_context
+            debug.sethook debug_hook, 'r'
+            result = eval!
+            debug.sethook!
+            return result
+
+          error 'Invalid expression'
+
+        if status
+          buf = howl.Buffer howl.mode.by_name 'moonscript'
+          buf.text = expression .. '\n'
+          if result != nil
+            result = serpent.block result, maxlevel: 1, nocode: true
+            buf.text ..= result .. '\n'
+          buf.text ..= '--\n'
+
+          return buf\chunk 1, #buf
+        else
+          return markup.howl "<error>#{result}\n</>"

@@ -19,7 +19,8 @@ class TextWidget extends PropertyObject
     with @view.config
       .view_show_inactive_cursor = false
       .view_line_padding = config.line_padding
-      .view_show_h_scrollbar = false
+      .view_show_h_scrollbar = @opts.show_h_scrollbar or false
+      .view_show_v_scrollbar = @opts.show_v_scrollbar
       .view_line_wrap = @opts.line_wrap
 
     @selection = Selection @view
@@ -41,6 +42,14 @@ class TextWidget extends PropertyObject
 
       on_focus_out: @opts.on_focus_lost
 
+  @property max_height_request:
+    set: (height) =>
+      unless height
+        @_max_visible_rows = nil
+        return
+      default_line_height = @view\text_dimensions('M').height
+      @_max_visible_rows = math.floor(height / default_line_height)
+
   @property width_cols:
     get: =>
       dimensions = @view\text_dimensions 'M'
@@ -53,6 +62,8 @@ class TextWidget extends PropertyObject
   @property visible_rows:
     get: => @_visible_rows
     set: (nr) =>
+      if @_max_visible_rows
+        nr = math.min nr, @_max_visible_rows
       return if nr == @_visible_rows
       @_visible_rows = nr
       @adjust_height!

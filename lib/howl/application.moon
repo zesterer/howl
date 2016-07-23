@@ -446,6 +446,7 @@ class Application extends PropertyObject
     require 'howl.interactions.buffer_selection'
     require 'howl.interactions.bundle_selection'
     require 'howl.interactions.clipboard'
+    require 'howl.interactions.console'
     require 'howl.interactions.external_command'
     require 'howl.interactions.file_selection'
     require 'howl.interactions.line_selection'

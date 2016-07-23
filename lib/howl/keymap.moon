@@ -104,6 +104,7 @@
 
   alt_f11:          'window-toggle-fullscreen'
   alt_x:            'run'
+  ctrl_shift_j:     'howl-console'
 
   shift_alt_left:  'view-left-or-create'
   shift_alt_right: 'view-right-or-create'
@@ -180,4 +181,5 @@
 
       ctrl_meta_f:      'window-toggle-fullscreen'
       ctrl_meta_x:      'run'
+      meta_shift_c:     'howl-console'
 }
