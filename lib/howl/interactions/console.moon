@@ -27,7 +27,7 @@ class Console
 
     unless console_history[@name]
       console_history[@name] = {
-        text: markup.howl '<comment>Type an expression and press [enter]\n</comment>'
+        text: markup.howl '<comment>Type an expression and press [enter]</comment>'
         commands: {}
       }
     @history = console_history[@name]
@@ -43,6 +43,8 @@ class Console
 
   append: (expr, result) =>
     table.insert @history.commands, expr
+    if result[1] != '\n' and @results_widget.buffer[#@results_widget.buffer] != '\n'
+      @results_widget\append '\n'
     @results_widget\append result
 
   submit: =>

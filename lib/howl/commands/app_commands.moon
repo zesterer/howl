@@ -475,7 +475,7 @@ command.register
           if result != nil
             result = serpent.block result, maxlevel: 1, nocode: true
             buf.text ..= result .. '\n'
-          buf.text ..= '--\n'
+          buf.text ..= '--'
 
           return buf\chunk 1, #buf
         else
