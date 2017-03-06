@@ -44,3 +44,24 @@ describe 'paths', ->
 
       files = paths.subtree_reader tmpdir
       assert.same {'a', 'a/x', 'b', 'b/y', 'b/c', 'b/c/z'}, [file\relative_to_parent(tmpdir) for file in *files]
+
+  describe 'get_cwd', ->
+    before_each ->
+      howl.app.editor = {}
+
+    after_each ->
+      for buf in *howl.app.buffers
+        howl.app\close_buffer buf
+        howl.app.editor.buffer = nil
+
+    it 'returns the current buffer directory, when present', ->
+      howl.app.editor = {buffer: howl.app\new_buffer!}
+      howl.app.editor.buffer.file = tmpdir / 'f'
+      assert.same tmpdir.path, paths.get_cwd(default: File '/tmp/default').path
+
+    context 'recent: true', ->
+      it 'returns the most recent buffer directory found', ->
+        b = howl.app\new_buffer!
+        b.file = tmpdir / 'g'
+        howl.app\new_buffer!
+        assert.same tmpdir.path, paths.get_cwd(recent: true, default: File '/tmp/default').path

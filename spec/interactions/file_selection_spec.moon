@@ -1,3 +1,4 @@
+
 -- Copyright 2012-2015 The Howl Developers
 -- License: MIT (see LICENSE.md at the top-level directory of the distribution)
 
@@ -47,6 +48,14 @@ describe 'file_selection', ->
         within_activity interact.select_file, ->
           prompt = command_line.prompt
         assert.same tostring(tmpdir)..'/', prompt
+
+    it 'opens the most recent buffer directory, when current buffer has no directory', ->
+      app\open_file tmpdir / 'f'
+      app.editor.buffer = app\new_buffer!
+      local prompt
+      within_activity interact.select_file, ->
+        prompt = command_line.prompt
+      assert.same tostring(tmpdir)..'/', prompt
 
     it 'typing a path opens the closest parent', ->
       prompts = {}

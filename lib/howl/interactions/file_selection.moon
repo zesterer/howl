@@ -41,7 +41,7 @@ class FileSelector
 
     @command_line\add_widget 'completion_list', @list_widget
 
-    parent = get_cwd default: File.home_dir
+    parent = get_cwd recent: true, default: File.home_dir
     path = @command_line\pop_spillover!
 
     if path.is_empty
