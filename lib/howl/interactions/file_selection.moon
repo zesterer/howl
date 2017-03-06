@@ -3,6 +3,7 @@
 
 import app, config, interact, log, Project from howl
 import File from howl.io
+import get_cwd from howl.util.paths
 import Preview from howl.interactions.util
 import icon, markup, style, ListWidget from howl.ui
 import file_matcher, subtree_matcher, subtree_reader, get_dir_and_leftover from howl.util.paths
@@ -40,10 +41,7 @@ class FileSelector
 
     @command_line\add_widget 'completion_list', @list_widget
 
-    buffer = app.editor and app.editor.buffer
-    parent = buffer and buffer.directory or (buffer.file and buffer.file.parent)
-    parent or= File.home_dir
-
+    parent = get_cwd default: File.home_dir
     path = @command_line\pop_spillover!
 
     if path.is_empty

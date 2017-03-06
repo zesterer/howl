@@ -21,10 +21,10 @@ howl.config.define
   type_of: 'boolean'
   default: true
 
-get_cwd = ->
+get_cwd = (opts={}) ->
   buffer = howl.app.editor and howl.app.editor.buffer
   directory = buffer and (buffer.file and buffer.file.parent or buffer.directory)
-  return directory or File glib.get_current_dir!
+  return directory or opts.default or File glib.get_current_dir!
 
 should_hide = (file) ->
   extensions = config.hidden_file_extensions
