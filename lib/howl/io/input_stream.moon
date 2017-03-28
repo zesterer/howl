@@ -37,6 +37,21 @@ class InputStream extends PropertyObject
 
     table.concat contents
 
+  pump_async: (handler, parking) =>
+    local read_handler
+    read_handler = (status, ret, err_code) ->
+      if not status
+        dispatch.resume_with_error parking, "#{ret} (#{err_code})"
+      else
+        handler ret
+        if ret == nil
+          @close!
+          dispatch.resume parking
+        else
+          @read_async nil, read_handler
+
+    @read_async nil, read_handler
+
   close: =>
     return if @stream.is_closed
     handle = dispatch.park 'input-stream-close'

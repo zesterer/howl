@@ -5,6 +5,57 @@ ffi = require 'ffi'
 require 'ljglibs.cdefs.glib'
 
 ffi.cdef [[
+  typedef enum {
+    G_IO_ERROR_FAILED,
+    G_IO_ERROR_NOT_FOUND,
+    G_IO_ERROR_EXISTS,
+    G_IO_ERROR_IS_DIRECTORY,
+    G_IO_ERROR_NOT_DIRECTORY,
+    G_IO_ERROR_NOT_EMPTY,
+    G_IO_ERROR_NOT_REGULAR_FILE,
+    G_IO_ERROR_NOT_SYMBOLIC_LINK,
+    G_IO_ERROR_NOT_MOUNTABLE_FILE,
+    G_IO_ERROR_FILENAME_TOO_LONG,
+    G_IO_ERROR_INVALID_FILENAME,
+    G_IO_ERROR_TOO_MANY_LINKS,
+    G_IO_ERROR_NO_SPACE,
+    G_IO_ERROR_INVALID_ARGUMENT,
+    G_IO_ERROR_PERMISSION_DENIED,
+    G_IO_ERROR_NOT_SUPPORTED,
+    G_IO_ERROR_NOT_MOUNTED,
+    G_IO_ERROR_ALREADY_MOUNTED,
+    G_IO_ERROR_CLOSED,
+    G_IO_ERROR_CANCELLED,
+    G_IO_ERROR_PENDING,
+    G_IO_ERROR_READ_ONLY,
+    G_IO_ERROR_CANT_CREATE_BACKUP,
+    G_IO_ERROR_WRONG_ETAG,
+    G_IO_ERROR_TIMED_OUT,
+    G_IO_ERROR_WOULD_RECURSE,
+    G_IO_ERROR_BUSY,
+    G_IO_ERROR_WOULD_BLOCK,
+    G_IO_ERROR_HOST_NOT_FOUND,
+    G_IO_ERROR_WOULD_MERGE,
+    G_IO_ERROR_FAILED_HANDLED,
+    G_IO_ERROR_TOO_MANY_OPEN_FILES,
+    G_IO_ERROR_NOT_INITIALIZED,
+    G_IO_ERROR_ADDRESS_IN_USE,
+    G_IO_ERROR_PARTIAL_INPUT,
+    G_IO_ERROR_INVALID_DATA,
+    G_IO_ERROR_DBUS_ERROR,
+    G_IO_ERROR_HOST_UNREACHABLE,
+    G_IO_ERROR_NETWORK_UNREACHABLE,
+    G_IO_ERROR_CONNECTION_REFUSED,
+    G_IO_ERROR_PROXY_FAILED,
+    G_IO_ERROR_PROXY_AUTH_FAILED,
+    G_IO_ERROR_PROXY_NEED_AUTH,
+    G_IO_ERROR_PROXY_NOT_ALLOWED,
+    G_IO_ERROR_BROKEN_PIPE,
+    G_IO_ERROR_CONNECTION_CLOSED = G_IO_ERROR_BROKEN_PIPE,
+    G_IO_ERROR_NOT_CONNECTED,
+    G_IO_ERROR_MESSAGE_TOO_LARGE
+  } GIOErrorEnum;
+
   typedef void GCancellable;
 
   /* GAsyncResult */
@@ -336,4 +387,77 @@ ffi.cdef [[
                                                  GBytes **stdout_buf,
                                                  GBytes **stderr_buf,
                                                  GError **error);
+
+  /* GSocket */
+  typedef struct {} GSocket;
+  typedef struct {} GSocketAddress;
+  typedef struct {} GInetSocketAddress;
+  typedef struct {} GUnixSocketAddress;
+
+  int glib_af_unix, glib_af_inet, glib_af_inet6;
+
+  typedef enum {
+    G_SOCKET_FAMILY_INVALID,
+    G_SOCKET_FAMILY_UNIX = glib_af_unix,
+    G_SOCKET_FAMILY_IPV4 = glib_af_inet,
+    G_SOCKET_FAMILY_IPV6 = glib_af_inet6
+  } GSocketFamily;
+
+  typedef enum {
+    G_SOCKET_TYPE_INVALID,
+    G_SOCKET_TYPE_STREAM,
+    G_SOCKET_TYPE_DATAGRAM,
+    G_SOCKET_TYPE_SEQPACKET
+  } GSocketType;
+
+  typedef enum {
+    G_SOCKET_PROTOCOL_UNKNOWN = -1,
+    G_SOCKET_PROTOCOL_DEFAULT = 0,
+    G_SOCKET_PROTOCOL_TCP     = 6,
+    G_SOCKET_PROTOCOL_UDP     = 17,
+    G_SOCKET_PROTOCOL_SCTP    = 132
+  } GSocketProtocol;
+
+  GSocket* g_socket_new (GSocketFamily family,
+                         GSocketType type,
+                         GSocketProtocol protocol,
+                         GError **error);
+
+  GSocket* g_socket_new_from_fd (gint fd,
+                                 GError **error);
+
+  void g_socket_set_blocking (GSocket *socket,
+                              gboolean blocking);
+
+  gboolean g_socket_connect (GSocket *socket,
+                             GSocketAddress *address,
+                             GCancellable *cancellable,
+                             GError **error);
+
+  gboolean g_socket_bind (GSocket *socket,
+                          GSocketAddress *address,
+                          gboolean allow_reuse,
+                          GError **error);
+
+  gboolean g_socket_listen (GSocket *socket,
+                            GError **error);
+
+  gssize g_socket_send (GSocket *socket,
+                        const gchar *buffer,
+                        gsize size,
+                        GCancellable *cancellable,
+                        GError **error);
+
+  gssize g_socket_receive (GSocket *socket,
+                           gchar *buffer,
+                           gsize size,
+                           GCancellable *cancellable,
+                           GError **error);
+
+  int g_socket_get_fd (GSocket *socket);
+
+  GSocketAddress *g_inet_socket_address_new_from_string (const char *address,
+                                                         guint16 port);
+
+  GSocketAddress *g_unix_socket_address_new (const gchar *path);
 ]]
