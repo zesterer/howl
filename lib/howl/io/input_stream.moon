@@ -17,7 +17,7 @@ class InputStream extends PropertyObject
   read: (num = 4096) =>
     handle = dispatch.park 'input-stream-read'
 
-    @stream\read_async num, @priority, (status, ret, err_code) ->
+    @read_async num, (status, ret, err_code) ->
       if status
         dispatch.resume handle, ret
       else

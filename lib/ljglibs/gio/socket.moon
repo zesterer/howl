@@ -68,7 +68,8 @@ GSocket = core.define 'GSocket', {
     read = catch_error C.g_socket_receive, @, buf, sz, nil
     ffi.string buf, read
 
-  get_fd: => catch_error C.g_socket_get_fd, @
+  get_fd: => C.g_socket_get_fd @
+  condition_check: (cond) => C.g_socket_condition_check @, cond
 
   Address: GSocketAddress
 }, (def, family, type, protocol) -> def.new family, type, protocol

@@ -388,6 +388,11 @@ ffi.cdef [[
                                                  GBytes **stderr_buf,
                                                  GError **error);
 
+  /* GIOCondition */
+  typedef int GIOCondition;
+  GIOCondition G_IO_COND_IN, G_IO_COND_OUT, G_IO_COND_PRI, G_IO_COND_ERR,
+               G_IO_COND_HUP, G_IO_COND_NVAL;
+
   /* GSocket */
   typedef struct {} GSocket;
   typedef struct {} GSocketAddress;
@@ -450,6 +455,9 @@ ffi.cdef [[
                            GError **error);
 
   int g_socket_get_fd (GSocket *socket);
+
+  GIOCondition g_socket_condition_check (GSocket *socket,
+                                         GIOCondition condition);
 
   GSocketAddress *g_inet_socket_address_new_from_string (const char *address,
                                                          guint16 port);
