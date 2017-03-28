@@ -9,9 +9,11 @@
 #define STRINGIFY(x) #x
 #define TOSTRING(x) STRINGIFY(x)
 
-int glib_af_unix = GLIB_SYSDEF_AF_UNIX;
-int glib_af_inet = GLIB_SYSDEF_AF_INET;
-int glib_af_inet6 = GLIB_SYSDEF_AF_INET6;
+#define G_SOCKET_FAMILY_ALIAS(name) int G_SOCKET_FAM_##name = G_SOCKET_FAMILY_##name;
+G_SOCKET_FAMILY_ALIAS(INVALID)
+G_SOCKET_FAMILY_ALIAS(UNIX)
+G_SOCKET_FAMILY_ALIAS(IPV4)
+G_SOCKET_FAMILY_ALIAS(IPV6)
 
 static void lua_run(int argc, char *argv[], const gchar *app_root, lua_State *L)
 {

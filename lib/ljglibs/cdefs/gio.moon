@@ -394,14 +394,9 @@ ffi.cdef [[
   typedef struct {} GInetSocketAddress;
   typedef struct {} GUnixSocketAddress;
 
-  int glib_af_unix, glib_af_inet, glib_af_inet6;
-
-  typedef enum {
-    G_SOCKET_FAMILY_INVALID,
-    G_SOCKET_FAMILY_UNIX = glib_af_unix,
-    G_SOCKET_FAMILY_IPV4 = glib_af_inet,
-    G_SOCKET_FAMILY_IPV6 = glib_af_inet6
-  } GSocketFamily;
+  typedef int GSocketFamily;
+  GSocketFamily G_SOCKET_FAM_INVALID, G_SOCKET_FAM_UNIX,
+                G_SOCKET_FAM_IPV4, G_SOCKET_FAM_IPV6;
 
   typedef enum {
     G_SOCKET_TYPE_INVALID,
