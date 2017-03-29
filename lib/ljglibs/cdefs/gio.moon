@@ -166,6 +166,9 @@ ffi.cdef [[
   typedef struct {} GIOStream;
   GInputStream * g_io_stream_get_input_stream (GIOStream *stream);
   GOutputStream * g_io_stream_get_output_stream (GIOStream *stream);
+  gboolean g_io_stream_close (GIOStream *stream,
+                              GCancellable *cancellable,
+                              GError **error);
 
   /* GFile and friends */
   typedef struct {} GFileInputStream;

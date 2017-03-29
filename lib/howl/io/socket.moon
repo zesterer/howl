@@ -6,6 +6,9 @@ import dispatch from howl
 
 
 class Socket extends PropertyObject
+  inet_address: (address, port) -> GSocketClient.Address.new_inet address, port
+  unix_address: (address) -> GSocketClient.Address.new_unix address
+
   new: (address, options) =>
     super!
     @client = GSocketClient!
@@ -17,16 +20,16 @@ class Socket extends PropertyObject
 
     connected = dispatch.park 'socket-ready'
     callback = (status, ret, err_code) ->
-      dispatch.resume connected, ret
+      if status
+        dispatch.resume connected, ret
+      else
+        dispatch.resume_with_error connected, "#{ret} (#{err_code})"
 
     @client\connect_async address, callback
-    conn = dispatch.wait connected
+    @conn = dispatch.wait connected
 
-    @_reader = BufferedInputStream conn\get_input_stream!
-    @_writer = OutputStream conn\get_output_stream!
-
-  inet_address: (address, port) -> GSocketClient.Address.new_inet address, port
-  unix_address: (address) -> GSocketClient.Address.new_unix address
+    @_reader = BufferedInputStream @conn\get_input_stream!
+    @_writer = OutputStream @conn\get_output_stream!
 
   @property reader: get: => @_reader
   @property writer: get: => @_writer
@@ -40,6 +43,11 @@ class Socket extends PropertyObject
 
   @property protocol:
     get: => @_convert_int_to_enum 'PROTOCOL', @client\get_protocol!
+
+  close: =>
+    @conn\close!
+    @reader\close!
+    @writer\close!
 
   _convert_enum_to_int: (kind, value) =>
     value = GSocketClient["#{kind}_#{value\upper!}"]
