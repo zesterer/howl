@@ -1,4 +1,3 @@
-ffi = require 'ffi'
 GSocketClient = require 'ljglibs.gio.socket_client'
 import BufferedInputStream, OutputStream from howl.io
 import PropertyObject from howl.util.moon
