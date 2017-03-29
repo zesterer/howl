@@ -15,8 +15,8 @@ class Socket extends PropertyObject
     @client = GSocketClient!
 
     if options
-      @client\set_protocol options.protocol if options.protocol
-      @client\set_socket_type options.socket_type if options.socket_type
+      @client\set_protocol @_convert_enum_to_int 'PROTOCOL', options.protocol if options.protocol
+      @client\set_socket_type @_convert_enum_to_int 'TYPE', options.socket_type if options.socket_type
       @client\set_timeout options.timeout if options.timeout
 
     connected = dispatch.park 'socket-ready'
@@ -44,6 +44,11 @@ class Socket extends PropertyObject
 
   @property protocol:
     get: => @_convert_int_to_enum 'PROTOCOL', @client\get_protocol!
+
+  _convert_enum_to_int: (kind, value) =>
+    value = GSocketClient["#{kind}_#{value\upper!}"]
+    error "Invalid #{kind\lower!} '#{value}' given to Socket" if not value
+    value
 
   _convert_int_to_enum: (kind, ival) =>
     for const in *GSocketClient.constants
