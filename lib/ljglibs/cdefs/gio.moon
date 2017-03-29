@@ -162,6 +162,11 @@ ffi.cdef [[
   typedef struct {} GUnixOutputStream;
   GUnixOutputStream * g_unix_output_stream_new (gint fd, gboolean close_fd);
 
+  /* GIOStream */
+  typedef struct {} GIOStream;
+  GInputStream * g_io_stream_get_input_stream (GIOStream *stream);
+  GOutputStream * g_io_stream_get_output_stream (GIOStream *stream);
+
   /* GFile and friends */
   typedef struct {} GFileInputStream;
   typedef struct {} GFileOutputStream;
@@ -388,20 +393,11 @@ ffi.cdef [[
                                                  GBytes **stderr_buf,
                                                  GError **error);
 
-  /* GIOCondition */
-  typedef int GIOCondition;
-  GIOCondition G_IO_COND_IN, G_IO_COND_OUT, G_IO_COND_PRI, G_IO_COND_ERR,
-               G_IO_COND_HUP, G_IO_COND_NVAL;
-
-  /* GSocket */
-  typedef struct {} GSocket;
+  /* GSocketClient */
+  typedef struct {} GSocketClient;
+  typedef struct {} GSocketConnection;
+  typedef struct {} GSocketConnectable;
   typedef struct {} GSocketAddress;
-  typedef struct {} GInetSocketAddress;
-  typedef struct {} GUnixSocketAddress;
-
-  typedef int GSocketFamily;
-  GSocketFamily G_SOCKET_FAM_INVALID, G_SOCKET_FAM_UNIX,
-                G_SOCKET_FAM_IPV4, G_SOCKET_FAM_IPV6;
 
   typedef enum {
     G_SOCKET_TYPE_INVALID,
@@ -418,49 +414,26 @@ ffi.cdef [[
     G_SOCKET_PROTOCOL_SCTP    = 132
   } GSocketProtocol;
 
-  GSocket* g_socket_new (GSocketFamily family,
-                         GSocketType type,
-                         GSocketProtocol protocol,
-                         GError **error);
+  GSocketClient * g_socket_client_new ();
 
-  GSocket* g_socket_new_from_fd (gint fd,
-                                 GError **error);
+  void g_socket_client_connect_async (GSocketClient *client,
+                                      GSocketConnectable *connectable,
+                                      GCancellable *cancellable,
+                                      GAsyncReadyCallback callback,
+                                      gpointer user_data);
 
-  void g_socket_set_blocking (GSocket *socket,
-                              gboolean blocking);
+  GSocketConnection * g_socket_client_connect_finish (GSocketClient *client,
+                                                      GAsyncResult *result,
+                                                      GError **error);
 
-  gboolean g_socket_connect (GSocket *socket,
-                             GSocketAddress *address,
-                             GCancellable *cancellable,
-                             GError **error);
+  void g_socket_client_set_socket_type (GSocketClient *client,
+                                        GSocketType type);
 
-  gboolean g_socket_bind (GSocket *socket,
-                          GSocketAddress *address,
-                          gboolean allow_reuse,
-                          GError **error);
+  void g_socket_client_set_protocol (GSocketClient *client,
+                                     GSocketProtocol protocol);
 
-  gboolean g_socket_listen (GSocket *socket,
-                            GError **error);
+  GSocketAddress * g_inet_socket_address_new_from_string (const char *address,
+                                                          guint16 port);
 
-  gssize g_socket_send (GSocket *socket,
-                        const gchar *buffer,
-                        gsize size,
-                        GCancellable *cancellable,
-                        GError **error);
-
-  gssize g_socket_receive (GSocket *socket,
-                           gchar *buffer,
-                           gsize size,
-                           GCancellable *cancellable,
-                           GError **error);
-
-  int g_socket_get_fd (GSocket *socket);
-
-  GIOCondition g_socket_condition_check (GSocket *socket,
-                                         GIOCondition condition);
-
-  GSocketAddress *g_inet_socket_address_new_from_string (const char *address,
-                                                         guint16 port);
-
-  GSocketAddress *g_unix_socket_address_new (const gchar *path);
+  GSocketAddress * g_unix_socket_address_new (const gchar *path);
 ]]

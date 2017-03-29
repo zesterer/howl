@@ -6,8 +6,8 @@ dispatch = howl.dispatch
 {:PropertyObject} = howl.util.moon
 
 class OutputStream extends PropertyObject
-  new: (fd) =>
-    @stream = UnixOutputStream fd
+  new: (@stream) =>
+    @stream = UnixOutputStream(@stream) if type(@stream) == 'number'
     super!
 
   @property is_closed: get: => @stream.is_closed
