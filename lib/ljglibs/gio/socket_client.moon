@@ -58,8 +58,12 @@ core.define 'GSocketClient', {
     handle = callbacks.register handler, 'socket-connect-async'
     C.g_socket_client_connect_async @, address, nil, gio.async_ready_callback, callbacks.cast_arg(handle.id)
 
+  get_protocol: => C.g_socket_client_get_protocol @
   set_protocol: (protocol) => C.g_socket_client_set_protocol protocol
+  get_socket_type: => C.g_socket_client_get_socket_type @
   set_socket_type: (type) => C.g_socket_client_set_socket_type type
+  get_timeout: => C.g_socket_client_get_timeout @
+  set_timeout: (value) => C.g_socket_client_set_timeout @, value
 
   Address: GSocketAddress
   Connection: GSocketConnection

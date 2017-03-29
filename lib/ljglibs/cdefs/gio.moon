@@ -426,9 +426,15 @@ ffi.cdef [[
                                                       GAsyncResult *result,
                                                       GError **error);
 
+  guint g_socket_client_get_timeout (GSocketClient *client);
+  void g_socket_client_set_timeout (GSocketClient *client,
+                                    guint timeout);
+
+  GSocketType g_socket_client_get_socket_type (GSocketClient *client);
   void g_socket_client_set_socket_type (GSocketClient *client,
                                         GSocketType type);
 
+  GSocketProtocol g_socket_client_get_protocol (GSocketClient *client);
   void g_socket_client_set_protocol (GSocketClient *client,
                                      GSocketProtocol protocol);
 
