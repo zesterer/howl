@@ -1,8 +1,6 @@
 import Process, Socket from howl.io
 
 describe 'Socket', ->
-  local nc
-
   nc_spec = (func) ->
     (done) ->
       howl_async ->

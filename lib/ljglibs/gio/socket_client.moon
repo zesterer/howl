@@ -8,7 +8,7 @@ core = require 'ljglibs.core'
 callbacks = require 'ljglibs.callbacks'
 gio = require 'ljglibs.gio'
 import gc_ptr from require 'ljglibs.gobject'
-import catch_error, get_error from require 'ljglibs.glib'
+import get_error from require 'ljglibs.glib'
 
 C, ffi_cast = ffi.C, ffi.cast
 
