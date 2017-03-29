@@ -9,20 +9,6 @@
 #define STRINGIFY(x) #x
 #define TOSTRING(x) STRINGIFY(x)
 
-#define G_SOCKET_FAMILY_ALIAS(name) int G_SOCKET_FAM_##name = G_SOCKET_FAMILY_##name;
-G_SOCKET_FAMILY_ALIAS(INVALID)
-G_SOCKET_FAMILY_ALIAS(UNIX)
-G_SOCKET_FAMILY_ALIAS(IPV4)
-G_SOCKET_FAMILY_ALIAS(IPV6)
-
-#define G_IO_COND_ALIAS(name) int G_IO_COND_##name = G_IO_##name;
-G_IO_COND_ALIAS(IN)
-G_IO_COND_ALIAS(OUT)
-G_IO_COND_ALIAS(PRI)
-G_IO_COND_ALIAS(ERR)
-G_IO_COND_ALIAS(HUP)
-G_IO_COND_ALIAS(NVAL)
-
 static void lua_run(int argc, char *argv[], const gchar *app_root, lua_State *L)
 {
   gchar *start_script;
