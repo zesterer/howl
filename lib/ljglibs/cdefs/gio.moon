@@ -397,6 +397,7 @@ ffi.cdef [[
   typedef struct {} GSocketClient;
   typedef struct {} GSocketConnection;
   typedef struct {} GSocketConnectable;
+  typedef struct {} GInetAddress;
   typedef struct {} GSocketAddress;
 
   typedef enum {
@@ -438,8 +439,10 @@ ffi.cdef [[
   void g_socket_client_set_protocol (GSocketClient *client,
                                      GSocketProtocol protocol);
 
-  GSocketAddress * g_inet_socket_address_new_from_string (const char *address,
-                                                          guint16 port);
+  GInetAddress * g_inet_address_new_from_string (const gchar *string);
+
+  GSocketAddress * g_inet_socket_address_new (GInetAddress *address,
+                                              guint16 port);
 
   GSocketAddress * g_unix_socket_address_new (const gchar *path);
 ]]

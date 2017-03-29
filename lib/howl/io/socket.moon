@@ -1,12 +1,8 @@
 ffi = require 'ffi'
-bit = require 'bit'
 GSocketClient = require 'ljglibs.gio.socket_client'
 import BufferedInputStream, OutputStream from howl.io
 import PropertyObject from howl.util.moon
 import dispatch from howl
-
-C, ffi_cast = ffi.C, ffi.cast
-append = table.insert
 
 
 class Socket extends PropertyObject

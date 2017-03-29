@@ -10,14 +10,18 @@ gio = require 'ljglibs.gio'
 import gc_ptr from require 'ljglibs.gobject'
 import catch_error, get_error from require 'ljglibs.glib'
 
-C = ffi.C
-ffi_cast = ffi.cast
+C, ffi_cast = ffi.C, ffi.cast
 
 core.define 'GSocketConnectable', {}
 
 
 GSocketAddress = core.define 'GSocketAddress < GSocketConnectable', {
-  new_inet: (address, port) -> C.g_inet_socket_address_new_from_string address, port
+  new_inet: (address, port) ->
+    inet = C.g_inet_address_new_from_string address
+    error "Error parsing inet address #{address}" if not inet
+
+    C.g_inet_socket_address_new inet, port
+
   new_unix: (address) -> C.g_unix_socket_address_new address
 }, (def, address, port) -> def.new_inet address, port
 
