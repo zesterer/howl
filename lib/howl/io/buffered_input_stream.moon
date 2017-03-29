@@ -15,12 +15,16 @@ class BufferedInputStream extends InputStream
     result
 
   readline: (bufsz=128) =>
-    while true
-      nl = @buffer\find '\n'
-      if nl
-        return @_pop_from_buffer(nl)\gsub '\r\n', ''
-      else
-        @buffer ..= @read bufsz
+    buf = @buffer
+    @buffer = ''
+
+    nl = buf\find '\n'
+    while not nl
+      buf ..= @read!
+      nl = buf\find '\n'
+
+    @buffer = buf
+    @_pop_from_buffer(nl)\gsub '\r?\n$', ''
 
   read_async: (num = 4096, handler) =>
     if num <= @buffer\len!

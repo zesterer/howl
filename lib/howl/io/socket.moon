@@ -10,18 +10,20 @@ append = table.insert
 
 
 class Socket extends PropertyObject
-  new: (address) =>
+  new: (address, options) =>
     super!
     @sock = GSocketClient!
 
+    if options
+      @sock\set_protocol options.protocol if options.protocol
+      @sock\set_socket_type options.socket_type if options.socket_type
+
     connected = dispatch.park 'socket-ready'
-    local conn
     callback = (status, ret, err_code) ->
-      conn = ret
-      dispatch.resume connected
+      dispatch.resume connected, ret
 
     @sock\connect_async address, callback
-    dispatch.wait connected
+    conn = dispatch.wait connected
 
     @_reader = BufferedInputStream conn\get_input_stream!
     @_writer = OutputStream conn\get_output_stream!

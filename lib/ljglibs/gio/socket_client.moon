@@ -59,7 +59,7 @@ core.define 'GSocketClient', {
     C.g_socket_client_connect_async @, address, nil, gio.async_ready_callback, callbacks.cast_arg(handle.id)
 
   set_protocol: (protocol) => C.g_socket_client_set_protocol protocol
-  set_type: (type) => C.g_socket_client_set_socket_type type
+  set_socket_type: (type) => C.g_socket_client_set_socket_type type
 
   Address: GSocketAddress
   Connection: GSocketConnection
