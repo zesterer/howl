@@ -73,6 +73,7 @@ signal.connect 'buffer-mode-set', (args) ->
   for e in *editors!
     if buffer == e.buffer
       e\_set_config_settings!
+      e.indicator.mode.label = buffer.mode.name
 
 class Editor extends PropertyObject
 
@@ -608,6 +609,8 @@ class Editor extends PropertyObject
     @_is_previewing = opts.preview
     @_buf = buffer
     @indicator.title.label = buffer.title
+    @indicator.position.label = ''
+    @indicator.mode.label = buffer.mode.name
 
     if buffer.activity and buffer.activity.is_running!
       with @indicator.activity
@@ -930,6 +933,7 @@ with Editor
   .register_indicator 'position', 'bottom_right'
   .register_indicator 'activity', 'top_right', -> Gtk.Spinner!
   .register_indicator 'inspections', 'bottom_left'
+  .register_indicator 'mode', 'bottom_right'
 
 -- Config variables
 
