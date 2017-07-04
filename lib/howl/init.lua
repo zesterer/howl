@@ -13,6 +13,7 @@ Where options can be any of:
   --compile     Compiles the given files to bytecode
   --lint        Lints the given files
   --run         Loads and runs the specified file from within Howl
+  --eval        Evaluate the specified code from within Howl
   --no-profile  Starts Howl without loading any user profile (settings, etc)
   --spec        Runs the specified Howl spec file(s)
   -h, --help    This help
@@ -31,6 +32,7 @@ local function parse_args(arg_vector)
     ['--no-profile'] = 'no_profile',
     ['--spec'] = 'spec',
     ['--run'] = 'run',
+    ['--eval'] = 'eval',
     ['-v'] = 'version',
     ['--version'] = 'version'
   }
@@ -173,6 +175,7 @@ local function main()
   require 'ljglibs.cdefs.glib'
 
   howl = auto_module('howl')
+
   require('howl.globals')
   _G.log = require('howl.log')
   local args = parse_args(argv)
@@ -205,6 +208,9 @@ local function main()
       busted()
     elseif args.run then
       local chunk = assert(loadfile(args[2]))
+      chunk(table.unpack(args, 3))
+    elseif args.eval then
+      local chunk = assert(loadstring(args[2]))
       chunk(table.unpack(args, 3))
     else
       howl.app:run()
