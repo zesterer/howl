@@ -381,7 +381,7 @@ ffi.cdef [[
                                 int	height);
 
 
-
+  unsigned int cairo_surface_get_reference_count (cairo_surface_t *surface);
   void cairo_surface_destroy (cairo_surface_t *surface);
 
   cairo_status_t cairo_surface_write_to_png (cairo_surface_t *surface,

@@ -42,7 +42,10 @@ class Background
 
     @has_padding = @padding_left + @padding_top + @padding_right + @padding_bottom > 0
     @opts = opts
-    @_surface = nil
+    if @_surface
+      @_surface\destroy!
+      @_surface = nil
+
     surfaces[@name] = nil
 
   resize: (width, height) =>
@@ -51,8 +54,11 @@ class Background
     @height = height if height
 
     -- keep one reference to the previous surface to save it from GC
+    -- if @_surface
+      -- @_previous_surface = @_surface
+
     if @_surface
-      @_previous_surface = @_surface
+      @_surface\destroy!
 
     @_surface = nil
 
@@ -95,8 +101,8 @@ class Background
       cache = setmetatable {}, __mode: 'v'
       surfaces[@name] = cache
 
-    cache_key = "#{@width}x#{@height}"
-    @_surface = cache[cache_key]
+    -- cache_key = "#{@width}x#{@height}"
+    -- @_surface = cache[cache_key]
     if @_surface
       return false -- re-use existing surface
 
@@ -117,7 +123,7 @@ class Background
       @opts.prepare @, cr
       cr\restore!
 
-    cache[cache_key] = surface
+    -- cache[cache_key] = surface
     true
 
   _draw_border: (cr) =>
