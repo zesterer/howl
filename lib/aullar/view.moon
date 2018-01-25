@@ -230,7 +230,9 @@ View = {
       set: (offset) =>
         @_y_scroll_offset += offset
         if @_y_scroll_offset < -1 or @_y_scroll_offset > 1
+          print "   Updating @first_visible_line (#{@first_visible_line})..."
           @first_visible_line += floor(@_y_scroll_offset)
+          print "   Updates @first_visible_line to #{@first_visible_line} (offset is #{@_y_scroll_offset})"
           @_y_scroll_offset = 0
     }
 
@@ -820,6 +822,8 @@ View = {
         @cursor\down extend: true
 
   _scroll_x: (value) =>
+    print " _scroll_x: #{value} (@base_x is #{@base_x}, speed is #{@scroll_speed_x})"
+
     value = value * (@scroll_speed_x / 100)
 
     if value > 0
@@ -829,24 +833,33 @@ View = {
       if adjustment
         new_base_x = min new_base_x, adjustment.upper - adjustment.page_size
       @base_x = new_base_x
+      print "  scrolled right: @base_x is now #{@base_x}"
     elseif value < 0
       -- Scroll left.
       @base_x -= 20 * -value
+      print "  scrolled left: @base_x is now #{@base_x}"
 
   _scroll_y: (value) =>
+    print " _scroll_y: #{value} (@y_scroll_offset is #{@y_scroll_offset}, speed is #{@scroll_speed_y})"
     @y_scroll_offset += value * (@scroll_speed_y / 100)
+    print "  @y_scroll_offset is now #{@y_scroll_offset}"
 
   _on_scroll: (_, event) =>
     event = ffi_cast('GdkEventScroll *', event)
     if event.direction == Gdk.SCROLL_UP
+      print 'SCROLL_UP'
       @_scroll_y -1
     elseif event.direction == Gdk.SCROLL_DOWN
+      print 'SCROLL_DOWN'
       @_scroll_y 1
     elseif event.direction == Gdk.SCROLL_RIGHT
+      print 'SCROLL_RIGHT'
       @_scroll_x 1
     elseif event.direction == Gdk.SCROLL_LEFT
+      print 'SCROLL_LEFT'
       @_scroll_x -1
     elseif event.direction == Gdk.SCROLL_SMOOTH
+      print "SCROLL_SMOOTH y: #{event.delta_y} x: #{event.delta_x}"
       @_scroll_y event.delta_y
       @_scroll_x event.delta_x
 
