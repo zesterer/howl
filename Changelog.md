@@ -2,6 +2,8 @@
 
 ## Unreleased (in master)
 
+- Added proper structure support for C/C++ mode
+
 - Base scheme support on the newer lisp mode instead of old basic mode
 
 - Added the `**popup_menu_accept_key` option, for controlling which key accepts
@@ -149,8 +151,7 @@ content with the result of piping it to an external command.
 ### Bugs fixed
 
 - Issues as seen on
-[Github](https://github.com/howl-editor/howl/issues?utf8=✓&q=closed%3A2016-05-30..2017-06-05%20is%3Aissue%20is%3Aclosed
-sort%3Acreated-asc)
+[Github](https://github.com/howl-editor/howl/issues?utf8=✓&q=closed%3A2016-05-30..2017-06-05%20is%3Aissue%20is%3Aclosedsort%3Acreated-asc)
 
 ## 0.4.1 (2016-10-14)
 

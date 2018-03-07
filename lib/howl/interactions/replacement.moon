@@ -41,6 +41,7 @@ class Replacement
     @preview_buffer = app\new_buffer opts.editor.buffer.mode
     @preview_buffer.title = opts.preview_title or 'Preview Replacements'
     @preview_buffer.text = @text
+    @preview_buffer.data.is_preview = true
 
     -- @buffer always holds original text
     @buffer = howl.Buffer!
@@ -313,7 +314,7 @@ class Replacement
         num_replaced: @num_replacements - @num_excluded
         target: @target
         replacement: @replacement
-        line_at_top: app.editor.buffer.line_at_top
+        line_at_top: app.editor.line_at_top
         :cursor_pos
 
       if result.num_replaced > 0
