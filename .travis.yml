@@ -1,6 +1,9 @@
 sudo: false
 language: c
 
+env:
+  - NO_AT_BRIDGE=1
+
 addons:
   apt:
     packages:
