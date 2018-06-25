@@ -16,6 +16,7 @@ describe 'edit_commands', ->
   teardown ->
     -- app.window = old_win
     app.editor = old_ed
+    app._editors = {}
 
   local buffer, cursor
 
