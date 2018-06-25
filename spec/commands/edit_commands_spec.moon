@@ -7,14 +7,14 @@ require 'howl.commands.edit_commands'
 describe 'edit_commands', ->
   local old_win, old_ed
   setup ->
-    old_win = app.window
+    -- old_win = app.window
     old_ed = app.editor
 
-    app.window = Window win: Gtk.OffscreenWindow!
+    -- app.window = Window win: Gtk.OffscreenWindow!
     app.editor = app\new_editor!
 
   teardown ->
-    app.window = old_win
+    -- app.window = old_win
     app.editor = old_ed
 
   local buffer, cursor
@@ -31,7 +31,7 @@ describe 'edit_commands', ->
 
   describe 'editor-move-lines-up', ->
     it 'moves the current line up', ->
-      command, cursor
+      command, cursor, old_win, Window, Gtk
   --     cursor\move_to line: 2, column: 2
   --     command.editor_move_lines_up!
 
