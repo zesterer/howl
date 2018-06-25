@@ -5,5 +5,5 @@ cd $ROOT
 
 for d in spec bundles lib/ljglibs/spec lib/aullar/spec; do
   echo "$d >>"
-  ./bin/howl-spec $d || exit 1
+  ./bin/howl-spec -o TAP $d || exit 1
 done
