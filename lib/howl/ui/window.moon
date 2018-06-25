@@ -46,7 +46,12 @@ class Window extends PropertyObject
       { expand: true, @box }
     }
 
-    @win = Gtk.Window Gtk.Window.TOPLEVEL
+    @win = if properties.win
+      w = properties.win
+      properties = {k,v for k,v in pairs(properties) when k != 'win' }
+      w
+    else
+      Gtk.Window Gtk.Window.TOPLEVEL
     @win[k] = v for k,v in pairs properties
 
     if Gtk.get_major_version! >= 3 and Gtk.get_minor_version! >= 4
