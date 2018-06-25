@@ -7,10 +7,11 @@ require 'howl.commands.edit_commands'
 describe 'edit_commands', ->
   local old_win, old_ed
   setup ->
-    -- old_win = app.window
+    old_win = app.window
     old_ed = app.editor
 
     -- app.window = Window win: Gtk.OffscreenWindow!
+    app.window = app\new_window win: Gtk.OffscreenWindow!
     app.editor = app\new_editor!
 
   teardown ->
