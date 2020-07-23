@@ -15,5 +15,5 @@
     use_tabs: false
     tab_width: 4
     indent: 4
-    edge_column: 99
+    edge_column: 119
 }

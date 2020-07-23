@@ -49,15 +49,15 @@ howl.util.lpeg_lexer ->
   -- Keywords.
   keyword = c 'keyword', word {
     'let', 'if',    'match', 'then', 'else',
-	'def', 'given', 'in',    'as',   'with',
-	'of',  'and',   'or',
+	'given', 'in',    'as',   'with',
+	'of',  'and',   'or',    'fn',
   }
   -- Special words
   special = c 'special', word { 'true', 'false' }
 
 
   -- Class/module declarations & type aliases
-  def = sequence {
+  decl = sequence {
     c 'keyword', word { 'def', 'type', 'data' }
     c 'whitespace', space^1
     c 'type_def', ident
@@ -101,7 +101,7 @@ howl.util.lpeg_lexer ->
     'all'
 
     all: any {
-      def,
+      decl,
       fdecl,
       special,
       keyword,
