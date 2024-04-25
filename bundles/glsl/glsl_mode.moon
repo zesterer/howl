@@ -13,7 +13,7 @@ next_relevant_line = (line) ->
 {
   lexer: bundle_load('glsl_lexer')
 
-  comment_syntax: { '/*', '*/' }
+  comment_syntax: '//'
 
   auto_pairs: {
     '(': ')'
