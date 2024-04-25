@@ -4,7 +4,6 @@
 howl.util.lpeg_lexer ->
   c = capture
   ident = (alpha + '_')^1 * (alpha + digit + '_')^0
-  ws = c 'whitespace', space
 
   identifier = c 'identifier', ident
 

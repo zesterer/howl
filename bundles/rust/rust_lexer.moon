@@ -13,7 +13,7 @@ howl.util.lpeg_lexer ->
   global_doc_comment = P'//!' * scan_until eol
   doc_comment = c 'doc_comment', any {item_doc_comment, global_doc_comment}
 
-  todo_comment = c 'todo', (P'//' * space^0 * P'TODO' * scan_until eol)
+  todo_comment = c 'todo', (P'//' * space^0 * (word { 'TODO', 'todo' }) * scan_until eol)
 
   line_comment = P'//' * scan_until eol
   inner = any { V'block_comment', complement('*/') }
@@ -66,9 +66,9 @@ howl.util.lpeg_lexer ->
     'while',      'yield',      'async',    'await',    'dyn',
     'try'
   }
-  -- Special words
-  special = c 'special', word { 'true', 'false', 'self', 'super', 'Self' }
 
+  -- Special words
+  special = c 'special', word { 'true', 'false', 'self', 'super', 'Self', 'std', 'core', 'alloc' }
 
   -- Class/module declarations & type aliases
   struct_def = sequence {
@@ -76,13 +76,13 @@ howl.util.lpeg_lexer ->
     c 'whitespace', space^1
     c 'type_def', ident
   }
+
   -- Function declarations
   fdecl = sequence {
     c 'keyword', 'fn'
     c 'whitespace', space^1
     c 'fdecl', ident
   }
-
 
    -- Primitive Types.
   primitive = word {
@@ -91,27 +91,34 @@ howl.util.lpeg_lexer ->
     'i8', 'i16', 'i32', 'i64', 'i128',
     'f32','f64', 'f128'
   }
+
   -- Library Types.
   library = upper^1 * (lower + digit)^0
+
   -- Lifetimes.
   lifetime = "'" * ident
   type = c 'type', any {lifetime, primitive}
   type_library = c 'constant', library
 
+  -- Members.
+  ident_lower = (lower + '_')^1 * (alpha + digit + '_')^0
+  member = c 'member', sequence {'.', ident_lower}
+  path = c 'member', any {
+      sequence {'::', ident_lower},
+      sequence {ident_lower, '::'}
+  }
+
   -- Identifiers.
   identifier = c 'identifier', ident
 
-
   -- Operators.
   operator = c 'operator', S'+-/*%<>!=`^~@&|?#~:;,.()[]{}'
-
 
   -- Attributes.
   attr_inner = any { V'attr_block', complement(']') }
   attr_block = '[' * attr_inner^0 * ']'
   attribute = c 'preproc', ('#' * attr_block)
   attribute_outer = c 'preproc', ('#!' * attr_block)
-
 
   -- Syntax extensions.
   extension = c 'special', any {ident * S'!'}
@@ -135,6 +142,8 @@ howl.util.lpeg_lexer ->
       attribute,
       attribute_outer,
       number,
+      member,
+      path,
       operator,
       identifier,
     }

@@ -83,7 +83,7 @@ howl.util.lpeg_lexer ->
     span '/*!', '*/'
   }
 
-  todo_comment = c 'todo', (P'//' * space^0 * P'TODO' * scan_until eol)
+  todo_comment = c 'todo', (P'//' * space^0 * (word { 'TODO', 'todo' }) * scan_until eol)
 
   comment = c 'comment', any {
     P'//' * scan_until eol,

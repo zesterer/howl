@@ -11,6 +11,7 @@ colors = {
   white: "#ffffff"
   green: "#5AF78E"
   turq: "#99EDFE"
+  special: "#7eeadf"
   blue: "#57C7FF"
   red: "#FF5C56"
   redder: "#dd9996"
@@ -23,6 +24,7 @@ colors = {
   gutter: "#879aa3"
   evergreen: "#84b795"
   search: '#a9f28e'
+  member: "#9ec9d6"
 }
 
 content_box = {
@@ -257,9 +259,9 @@ return {
     number: color: colors.pale_pink
     operator: color: colors.blue
     preproc: color: colors.evergreen
-    special: color: colors.turq
-    tag: color: colors.fg
-    member: color: colors.fg
+    special: color: colors.special
+    tag: color: colors.member
+    member: color: colors.member
     info: color: colors.fg
     constant: color: colors.redder
     string: color: colors.brown
