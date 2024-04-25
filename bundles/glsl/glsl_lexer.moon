@@ -25,7 +25,8 @@ howl.util.lpeg_lexer ->
     'else', 'enum', 'extern', 'for', 'goto', 'if', '_Imaginary', 'inline',
     'register', 'restrict', 'return', 'signed', 'sizeof', 'static', 'struct',
     'switch', 'typedef', 'union', 'volatile', 'while', 'uniform', 'layout',
-	'uniform', 'sampler', 'sampler2D'
+	'uniform', 'sampler', 'sampler2D', 'texture2D', 'textureCube', 'samplerShadow', 'in',
+    'flat', 'location', 'set', 'binding'
   }
 
   type = c 'type', word {
