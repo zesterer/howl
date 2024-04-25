@@ -1,0 +1,7 @@
+[test]
+
+foo = "bar"
+baz = 4
+biz = 8.3
+
+buzz = { foo = "bar" }
