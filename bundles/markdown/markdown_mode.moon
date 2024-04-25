@@ -11,7 +11,12 @@ is_header = (line) ->
   word_pattern: r'\\b\\w[\\w\\d_-]+\\b'
 
   default_config:
+    use_tabs: false
+    tab_width: 4
+    indent: 4
+    auto_reflow_text: true
     cursor_line_highlighted: false
+    edge_column: 119
 
   auto_pairs: {
       '(': ')'
@@ -29,7 +34,7 @@ is_header = (line) ->
     return true if line.is_blank or is_header line
     prev = line.previous
     return true if prev and (is_header(prev) or prev\match('^```'))
-    line\umatch r'^(?:[\\s-*[]|```)'
+    line\umatch r'^(?:[\\s\\-*[]|```)'
 
   line_is_reflowable: (line) =>
     no_break = { '^```', '^%s*#', '^%s*|'  }

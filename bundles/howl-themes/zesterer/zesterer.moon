@@ -3,8 +3,9 @@
 {:delegate_to} = howl.util.table
 
 colors = {
-  bg: "#122935"
+  bg: "#1f2a30"
   margin_bg: "#1f313a"
+  todo_bg: "#3d1c1b"
   -- fg: "#F1F1F0"
   fg: "#d8d8d8"
   white: "#ffffff"
@@ -15,38 +16,40 @@ colors = {
   redder: "#dd9996"
   pink: "#FF6AC1"
   pale_pink: "#dd96c0"
-  brown: "#f9e79d"
-  cream: "#d8b98c"
+  brown: "#e8c87d"
+  yellow: "#f4d924"
+  cream: "#ccb696"
   grey: "#808b8e"
   gutter: "#879aa3"
   evergreen: "#84b795"
+  search: '#a9f28e'
 }
 
 content_box = {
   background:
-    color: colors.bg
+    color: colors.margin_bg
   border:
     width: 1
-    color: colors.bg
+    color: colors.margin_bg
   border_right:
-    width: 3
-    color: colors.bg
+    width: 4
+    color: colors.margin_bg
   border_bottom:
-    width: 3
-    color: colors.bg
+    width: 4
+    color: colors.margin_bg
   header:
     background:
-      color: colors.bg
+      color: colors.margin_bg
     border_bottom:
-      color: colors.bg
+      color: colors.margin_bg
     color: colors.fg
-    font: bold: false
+    font: bold: true
     padding: 1
   footer:
     background:
-      color: colors.bg
+      color: colors.margin_bg
     border_top:
-      color: colors.bg
+      color: colors.margin_bg
     color: colors.fg
     padding: 1
 }
@@ -54,25 +57,27 @@ content_box = {
 return {
   window:
     background:
-      color: colors.bg
+      color: colors.margin_bg
     status:
       font:
-        bold: false
+        bold: true
         italic: true
       color: colors.fg
       info: color: colors.fg
-      warning: color: colors.brown
+      warning: color: colors.yellow
       'error': color: colors.red
 
   :content_box
 
   popup:
     background:
-      color: colors.bg
+      color: colors.margin_bg
     border:
       color: colors.grey
 
   editor: delegate_to content_box, {
+    background: color: colors.bg
+
     indicators:
       default:
         color: colors.fg
@@ -86,7 +91,7 @@ return {
       width: 1
 
     current_line:
-      background: colors.brown -- ?
+      background: colors.white -- ?
 
     gutter:
       color: colors.gutter
@@ -126,15 +131,17 @@ return {
 
     search: -- selected search
       type: highlight.ROUNDED_RECTANGLE
-      foreground_alpha: 1
-      background: colors.turq
-      text_color: colors.bg
+      --foreground_alpha: 1
+      background: colors.search
+      background_alpha: 0.35
+      --text_color: colors.bg
       height: 'text'
 
     search_secondary: -- non selected search
       type: flair.ROUNDED_RECTANGLE
-      background: colors.red
-      text_color: colors.bg
+      background: colors.search
+      background_alpha: 0.2
+      --text_color: colors.bg
       height: 'text'
 
     replace_strikeout:
@@ -145,13 +152,15 @@ return {
       height: 'text'
 
     brace_highlight:
-      type: flair.RECTANGLE
-      text_color: colors.turq
+      type: flair.ROUNDED_RECTANGLE
+      background: colors.evergreen
+      background_alpha: 0.25
       height: 'text'
 
     brace_highlight_secondary:
-      type: flair.RECTANGLE
-      text_color: colors.pink
+      type: flair.ROUNDED_RECTANGLE
+      background: colors.pink
+      background_alpha: 0.25
       height: 'text'
 
     list_selection:
@@ -168,7 +177,7 @@ return {
     cursor:
       type: flair.RECTANGLE
       background: colors.fg
-      width: 1
+      width: 2
       height: 'text'
 
     block_cursor:
@@ -204,6 +213,7 @@ return {
       color: colors.grey
 
     doc_comment:
+        font: italic: true
         color: colors.cream
 
     variable:
@@ -262,6 +272,10 @@ return {
       color: colors.fg
       background: colors.bg
 
+    todo:
+      color: colors.fg
+      background: colors.todo_bg
+
     -- Markup and visual styles
 
     error:
@@ -299,7 +313,7 @@ return {
       background: colors.bg
       underline: true
 
-    addition: color: colors.fg
-    deletion: color: colors.fg
-    change: color: colors.fg
+    addition: color: colors.green
+    deletion: color: colors.red
+    change: color: colors.turq
   }
