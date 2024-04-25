@@ -29,7 +29,11 @@ howl.util.lpeg_lexer ->
 
   type = c 'type', word {
     'bool', 'char16_t', 'char32_t', 'char', '_Bool', 'double', 'float', 'int',
-    'long', 'short', 'unsigned', 'void', 'wchar_t'
+    'long', 'short', 'signed', 'unsigned', 'void', 'wchar_t',
+    'int8_t', 'int16_t', 'int32_t', 'int64_t', 'int128_t',
+    'uint8_t', 'uint16_t', 'uint32_t', 'uint64_t', 'uint128_t',
+    'intptr_t', 'uintptr_t',
+    'intmax_t', 'uintmax_t',
   }
 
   attribute_spec = sequence {
@@ -71,6 +75,13 @@ howl.util.lpeg_lexer ->
   }
 
   operator = c 'operator', S'+-*/%=<>~&^|!(){}[];.,?:'
+
+  doc_comment = c 'doc_comment', any {
+    P'///' * scan_until eol,
+    P'//!' * scan_until eol,
+    span '/**', '*/'
+    span '/*!', '*/'
+  }
 
   comment = c 'comment', any {
     P'//' * scan_until eol,
@@ -120,6 +131,7 @@ howl.util.lpeg_lexer ->
     all: any {
       include_stmt,
       preproc,
+      doc_comment,
       comment,
       raw_string,
       string,
