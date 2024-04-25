@@ -10,7 +10,10 @@ howl.util.lpeg_lexer ->
 
   operator = c 'operator', S'+-*/%&|^<>=!:;.,()[]{}'
 
-  section = c 'class', line_start * span('[', ']')
+  section = c 'class', line_start * space^0 *any {
+      span('[[', ']]'),
+      span('[', ']')
+  }
 
   comment = c 'comment', P'#' * scan_until eol
 
