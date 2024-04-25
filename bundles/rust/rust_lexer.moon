@@ -9,10 +9,14 @@ howl.util.lpeg_lexer ->
 
 
   -- Comments.
-  line_comment = P'//' * scan_until eol
-  block_comment = span '/*', '*/'
-  comment = c 'comment', any {line_comment, block_comment}
+  item_doc_comment = P'///' * scan_until eol
+  global_doc_comment = P'//!' * scan_until eol
+  doc_comment = c 'doc_comment', any {item_doc_comment, global_doc_comment}
 
+  line_comment = P'//' * scan_until eol
+  inner = any { V'block_comment', complement('*/') }
+  block_comment = '/*' * inner^0 * '*/'
+  comment = c 'comment', any {line_comment, block_comment}
 
   hex_digit = R'09' + R'af' + R'AF' + '_'
 
@@ -57,10 +61,11 @@ howl.util.lpeg_lexer ->
     'pub',        'pure',       'ref',      'return',   'sizeof',
     'static',     'struct',     'trait',    'typeof',   'type',
     'unsafe',     'unsized',    'use',      'virtual',  'where',
-    'while',      'yield'
+    'while',      'yield',      'async',    'await',    'dyn',
+    'try'
   }
   -- Special words
-  special = c 'special', word { 'true', 'false', 'self', 'super' }
+  special = c 'special', word { 'true', 'false', 'self', 'super', 'Self' }
 
 
   -- Class/module declarations & type aliases
@@ -80,11 +85,12 @@ howl.util.lpeg_lexer ->
    -- Primitive Types.
   primitive = word {
     'bool', 'isize', 'usize', 'char', 'str',
-    'u8', 'u16', 'u32', 'u64', 'i8', 'i16', 'i32', 'i64',
-    'f32','f64',
+    'u8', 'u16', 'u32', 'u64', 'u128'
+    'i8', 'i16', 'i32', 'i64', 'i128',
+    'f32','f64', 'f128'
   }
   -- Library Types.
-  library = upper^1 * (lower + digit)^1
+  library = upper^1 * (lower + digit)^0
   -- Lifetimes.
   lifetime = "'" * ident
   type = c 'type', any {lifetime, primitive}
@@ -99,7 +105,10 @@ howl.util.lpeg_lexer ->
 
 
   -- Attributes.
-  attribute = c 'preproc', (span (P'#![' + P'#['), P']')
+  attr_inner = any { V'attr_block', complement(']') }
+  attr_block = '[' * attr_inner^0 * ']'
+  attribute = c 'preproc', ('#' * attr_block)
+  attribute_outer = c 'preproc', ('#!' * attr_block)
 
 
   -- Syntax extensions.
@@ -115,14 +124,18 @@ howl.util.lpeg_lexer ->
       special,
       keyword,
       extension,
+      doc_comment,
       comment,
       string,
       type_library,
       type,
       attribute,
+      attribute_outer,
       number,
       operator,
       identifier,
     }
+    block_comment: block_comment
+    attr_block: attr_block
   }
 
