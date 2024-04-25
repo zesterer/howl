@@ -13,6 +13,8 @@ howl.util.lpeg_lexer ->
   global_doc_comment = P'//!' * scan_until eol
   doc_comment = c 'doc_comment', any {item_doc_comment, global_doc_comment}
 
+  todo_comment = c 'todo', (P'//' * space^0 * P'TODO' * scan_until eol)
+
   line_comment = P'//' * scan_until eol
   inner = any { V'block_comment', complement('*/') }
   block_comment = '/*' * inner^0 * '*/'
@@ -124,6 +126,7 @@ howl.util.lpeg_lexer ->
       special,
       keyword,
       extension,
+      todo_comment,
       doc_comment,
       comment,
       string,
