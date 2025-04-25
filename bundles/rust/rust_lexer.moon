@@ -66,6 +66,9 @@ howl.util.lpeg_lexer ->
     'while',      'yield',      'async',    'await',    'dyn',
     'try'
   }
+  postfix_keyword = c 'keyword', any {
+    P'.await'
+  }
 
   -- Special words
   special = c 'special', word { 'true', 'false', 'self', 'super', 'Self', 'std', 'core', 'alloc' }
@@ -132,6 +135,7 @@ howl.util.lpeg_lexer ->
       fdecl,
       special,
       keyword,
+      postfix_keyword,
       extension,
       todo_comment,
       doc_comment,
