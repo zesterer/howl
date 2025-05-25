@@ -14,6 +14,7 @@ howl.util.lpeg_lexer ->
   doc_comment = c 'doc_comment', any {item_doc_comment, global_doc_comment}
 
   todo_comment = c 'todo', (P'//' * space^0 * (word { 'TODO', 'todo' }) * scan_until eol)
+  merge_conflict = c 'merge', ((word { '<<<<<<<', '=======', '>>>>>>>' }) * scan_until eol)
 
   line_comment = P'//' * scan_until eol
   inner = any { V'block_comment', complement('*/') }
@@ -138,6 +139,7 @@ howl.util.lpeg_lexer ->
       postfix_keyword,
       extension,
       todo_comment,
+      merge_conflict,
       doc_comment,
       comment,
       string,

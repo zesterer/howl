@@ -6,6 +6,7 @@ colors = {
   bg: "#1f2a30"
   margin_bg: "#1f313a"
   todo_bg: "#3d1c1b"
+  merge_bg: "#028c5e"
   -- fg: "#F1F1F0"
   fg: "#d8d8d8"
   white: "#ffffff"
@@ -275,8 +276,16 @@ return {
       background: colors.bg
 
     todo:
+      font:
+          italic: true
+          bold: true
       color: colors.fg
       background: colors.todo_bg
+
+    merge:
+      font: italic: true
+      color: colors.fg
+      background: colors.merge_bg
 
     -- Markup and visual styles
 
